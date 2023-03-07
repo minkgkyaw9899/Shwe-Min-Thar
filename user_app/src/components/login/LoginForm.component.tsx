@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef } from "react"
 import { useNavigation } from "@react-navigation/native"
 import { Controller, SubmitHandler, useForm } from "react-hook-form"
 import {
@@ -11,13 +11,16 @@ import {
 } from "@ui-kitten/components"
 import { TouchableOpacity } from "react-native"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useAppDispatch } from "hooks"
-import { EmailIcon, EyeIcon, LockIcon } from "components/Icons.component"
+import { useAppDispatch, useAppSelector } from "hooks"
+import {
+    EmailIcon,
+    EyeIcon,
+    LockIcon,
+} from "components/miscellaneous/Icons.component"
 import { LoginSchema } from "utils"
-import { ErrorMessage } from "./ErrorMessage.component"
-import { LoginScreenProps } from "screens/login.screen"
-
-import { login } from "actions/authUserSlice"
+import { ErrorMessage } from "components/miscellaneous"
+import { selectAuthUser, login } from "actions/authUserSlice"
+import { LoginScreenProps } from "types/navigation/types"
 
 interface FormState {
     email: string
@@ -27,9 +30,20 @@ interface FormState {
 export const LoginForm = () => {
     const styles = useStyleSheet(themeStyle)
 
-    const { navigation } = useNavigation<LoginScreenProps>()
+    const navigation = useNavigation<LoginScreenProps>()
 
-    // const authUser = useAppDispatch(selectAuthUser)
+    const authUser = useAppSelector(selectAuthUser)
+
+    useEffect(() => {
+        if (!authUser.token) {
+            // @ts-ignore
+            return navigation.addListener("beforeRemove", (e) => {
+                e.preventDefault()
+                // @ts-ignore
+                navigation.push("Main")
+            })
+        }
+    }, [authUser.token, navigation])
 
     const dispatch = useAppDispatch()
 
@@ -49,32 +63,35 @@ export const LoginForm = () => {
     const emailRef = useRef<Input>(null)
     const passwordRef = useRef<Input>(null)
 
-    const [secureText, setSecureText] = React.useState<boolean>(false)
+    const [secureText, setSecureText] = React.useState<boolean>(true)
 
     const onSubmit: SubmitHandler<FormState> = (data) => {
+        reset({
+            email: "",
+            password: "",
+        })
+
         const user = {
             name: "example name",
             email: data.email,
             password: data.password,
             token: "shwe_min_thar_123_token",
         }
+
         dispatch(login(user))
 
-        reset({
-            email: "",
-            password: "",
-        })
-
-        return navigation.navigate("Home")
+        // @ts-ignore
+        return navigation.goBack()
     }
     return (
         <Layout level="3" style={styles.container}>
             <Controller
                 name={"email"}
                 control={control}
-                render={({ field: { onBlur, onChange } }) => {
+                render={({ field: { onBlur, onChange, value } }) => {
                     return (
                         <Input
+                            value={value}
                             style={styles.input}
                             status={errors.email ? "danger" : "primary"}
                             accessoryLeft={<EmailIcon />}
@@ -97,9 +114,10 @@ export const LoginForm = () => {
             <Controller
                 name={"password"}
                 control={control}
-                render={({ field: { onBlur, onChange } }) => {
+                render={({ field: { onBlur, onChange, value } }) => {
                     return (
                         <Input
+                            value={value}
                             style={styles.input}
                             status={errors.password ? "danger" : "primary"}
                             accessoryRight={
@@ -114,7 +132,7 @@ export const LoginForm = () => {
                             onChangeText={onChange}
                             onBlur={onBlur}
                             placeholder={"Password"}
-                            secureTextEntry={true}
+                            secureTextEntry={secureText}
                             ref={passwordRef}
                             onSubmitEditing={handleSubmit(onSubmit)}
                             caption={<ErrorMessage error={errors.password} />}

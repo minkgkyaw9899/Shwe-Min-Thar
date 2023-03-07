@@ -11,16 +11,16 @@ import {
     EmailIcon,
     EyeIcon,
     LockIcon,
-    UserIcon,
-} from "components/Icons.component"
+    PersonIcon,
+} from "components/miscellaneous/Icons.component"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { ErrorMessage } from "./ErrorMessage.component"
+import { ErrorMessage } from "components/miscellaneous"
 import { RegisterSchema } from "utils/registerSchema"
 import { RegisterAvatar } from "./RegisterAvatar.component"
 import { login } from "actions/authUserSlice"
 import { useNavigation } from "@react-navigation/native"
-import { RegisterScreenProps } from "screens/register.screen"
 import { useAppDispatch } from "hooks"
+import { RegisterScreenProps } from "types/navigation/types"
 
 interface FormState {
     name: string
@@ -30,7 +30,7 @@ interface FormState {
 }
 
 export const RegisterForm = () => {
-    const { navigation } = useNavigation<RegisterScreenProps>()
+    const navigation = useNavigation<RegisterScreenProps>()
 
     const dispatch = useAppDispatch()
 
@@ -73,6 +73,7 @@ export const RegisterForm = () => {
             password: "",
         })
 
+        // @ts-ignore
         return navigation.navigate("Home")
     }
     return (
@@ -81,12 +82,13 @@ export const RegisterForm = () => {
             <Controller
                 name={"name"}
                 control={control}
-                render={({ field: { onBlur, onChange } }) => {
+                render={({ field: { onBlur, onChange, value } }) => {
                     return (
                         <Input
+                            value={value}
                             style={styles.input}
                             status={errors.name ? "danger" : "primary"}
-                            accessoryLeft={<UserIcon />}
+                            accessoryLeft={<PersonIcon />}
                             autoCapitalize={"none"}
                             returnKeyType={"next"}
                             returnKeyLabel={"Next"}
@@ -104,9 +106,10 @@ export const RegisterForm = () => {
             <Controller
                 name={"email"}
                 control={control}
-                render={({ field: { onBlur, onChange } }) => {
+                render={({ field: { onBlur, onChange, value } }) => {
                     return (
                         <Input
+                            value={value}
                             style={styles.input}
                             status={errors.email ? "danger" : "primary"}
                             accessoryLeft={<EmailIcon />}
@@ -129,9 +132,10 @@ export const RegisterForm = () => {
             <Controller
                 name={"password"}
                 control={control}
-                render={({ field: { onBlur, onChange } }) => {
+                render={({ field: { onBlur, onChange, value } }) => {
                     return (
                         <Input
+                            value={value}
                             style={styles.input}
                             status={errors.password ? "danger" : "primary"}
                             accessoryRight={
@@ -159,9 +163,10 @@ export const RegisterForm = () => {
             <Controller
                 name={"confirmPassword"}
                 control={control}
-                render={({ field: { onBlur, onChange } }) => {
+                render={({ field: { onBlur, onChange, value } }) => {
                     return (
                         <Input
+                            value={value}
                             style={styles.input}
                             status={
                                 errors.confirmPassword ? "danger" : "primary"

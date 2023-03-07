@@ -1,14 +1,16 @@
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native"
 import React, { useEffect, useState } from "react"
 import { Avatar, Button, Card, Modal, Text } from "@ui-kitten/components"
-import { CameraIcon } from "./Icons.component"
+import { CameraIcon } from "components/miscellaneous"
 import { openCamera, openGallery } from "utils"
 import { useToast } from "react-native-toast-notifications"
 import { useAppDispatch, useAppSelector } from "hooks"
-import { addAvatar, selectAuthUser } from "actions"
+import { login, selectAuthUser } from "actions"
 
 export const RegisterAvatar = () => {
-    const { avatarUrl } = useAppSelector(selectAuthUser)
+    const authUser = useAppSelector(selectAuthUser)
+
+    const { avatarUrl } = authUser
 
     const toast = useToast()
 
@@ -31,7 +33,7 @@ export const RegisterAvatar = () => {
 
             handleModal()
 
-            return dispatch(addAvatar(img))
+            return dispatch(login({ avatarUrl: img }))
         } catch (err: any) {
             return setError(err)
         }
@@ -43,7 +45,7 @@ export const RegisterAvatar = () => {
 
             handleModal()
 
-            return dispatch(addAvatar(img))
+            return dispatch(login({ avatarUrl: img }))
         } catch (err: any) {
             return setError(err)
         }
@@ -58,7 +60,7 @@ export const RegisterAvatar = () => {
                         size="giant"
                         source={
                             !avatarUrl
-                                ? require("../assets/img/avatar.png")
+                                ? require("../../assets/img/avatar.png")
                                 : { uri: avatarUrl }
                         }
                     />

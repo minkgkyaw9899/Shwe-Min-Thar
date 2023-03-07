@@ -3,10 +3,10 @@ import { RootState } from "store"
 
 interface AuthUser {
     avatarUrl?: string
-    email: string | undefined
-    name: string | undefined
+    email?: string
+    name?: string
     password?: string
-    token: string | undefined
+    token?: string
 }
 
 const initialState = {
@@ -20,27 +20,20 @@ const authUserSlice = createSlice({
     name: "authUser",
     initialState,
     reducers: {
-        addAvatar: (state, action: PayloadAction<string | undefined>) => {
-            state.avatarUrl = action.payload
+        login: (state, action: PayloadAction<AuthUser>) => {
+            console.log("auth state", state)
+            return {
+                ...action.payload,
+            }
         },
-        login: (state, action: PayloadAction<Omit<AuthUser, "avatarUrl">>) => {
-            state.email = action.payload.email
-            state.password = action.payload.password
-            state.token = action.payload.token
-            state.name = action.payload.name
-        },
-        logOut: (state) => {
-            state.avatarUrl = undefined
-            state.email = undefined
-            state.password = undefined
-            state.token = undefined
-            state.name = undefined
+        logout: () => {
+            return initialState
         },
     },
 })
 
-export const { addAvatar, login, logOut } = authUserSlice.actions
+export const { login, logout } = authUserSlice.actions
 
-export const selectAuthUser = (state: RootState) => state.authUser
+export const selectAuthUser = (state: RootState) => state.user
 
 export default authUserSlice.reducer

@@ -9,8 +9,10 @@ module.exports = {
                 alias: {
                     app: "./src",
                     actions: "./src/actions",
+                    api: "./src/api",
                     components: "./src/components",
                     hooks: "./src/hooks",
+                    icons: "./src/icons",
                     navigation: "./src/navigation",
                     screens: "./src/screens",
                     store: "./src/store",

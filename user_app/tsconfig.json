@@ -8,6 +8,7 @@
             "actions/*": ["src/actions/*"],
             "components/*": ["src/components/*"],
             "hooks/*": ["src/hooks/*"],
+            "icons/*": ["src/icons/*"],
             "navigation/*": ["src/navigation/*"],
             "screens/*": ["src/screens/*"],
             "test/*": ["test/*"],

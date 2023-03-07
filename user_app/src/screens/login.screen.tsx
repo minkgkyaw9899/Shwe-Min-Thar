@@ -2,12 +2,10 @@
 import React, { FC } from "react"
 import { TouchableOpacity, View } from "react-native"
 import { StyleService, Text, useStyleSheet } from "@ui-kitten/components"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { AppStackParamsList } from "navigation/appStack.navigator"
-import { KeyboardAvoidingView, LoginForm } from "components"
+import { KeyboardAvoidingView } from "components/miscellaneous"
 import LoginSvg from "../assets/svg/login.svg"
-
-export type LoginScreenProps = NativeStackScreenProps<AppStackParamsList, "Login">
+import { LoginScreenProps } from "types/navigation/types"
+import { LoginForm } from "components/login"
 
 const LoginScreen: FC<LoginScreenProps> = ({ navigation }) => {
     const styles = useStyleSheet(themeStyle)

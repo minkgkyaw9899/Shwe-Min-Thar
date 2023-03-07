@@ -2,14 +2,9 @@
 import React, { FC } from "react"
 import { TouchableOpacity, View } from "react-native"
 import { StyleService, Text, useStyleSheet } from "@ui-kitten/components"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { AppStackParamsList } from "navigation/appStack.navigator"
-import { KeyboardAvoidingView, RegisterForm } from "components"
-
-export type RegisterScreenProps = NativeStackScreenProps<
-    AppStackParamsList,
-    "Register"
->
+import { KeyboardAvoidingView } from "components/miscellaneous"
+import { RegisterScreenProps } from "types/navigation/types"
+import { RegisterForm } from "components/register"
 
 const RegisterScreen: FC<RegisterScreenProps> = ({ navigation }) => {
     const styles = useStyleSheet(themeStyle)
