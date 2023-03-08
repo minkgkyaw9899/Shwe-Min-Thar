@@ -91,3 +91,5 @@ export const StarIcon = (props: any) => <Icon name="star" {...props} />
 export const TrashOutlineIcon = (props: any) => (
     <Icon name="trash-outline" {...props} />
 )
+
+export const TrashIcon = (props: any) => <Icon name="trash-2" {...props} />

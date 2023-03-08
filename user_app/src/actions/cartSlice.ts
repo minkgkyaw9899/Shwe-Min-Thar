@@ -16,7 +16,8 @@ export interface CartItem {
 const cartSlice = createSlice({
     name: "cart",
     initialState: {
-        total: 0,
+        totalItem: 0,
+        totalAmount: 0,
         items: [] as CartItem[],
     },
     reducers: {
@@ -29,9 +30,15 @@ const cartSlice = createSlice({
             )
 
             if (existingItem) {
+                state.totalItem = state.totalItem + action.payload.quantity
                 existingItem.quantity += action.payload.quantity
+                state.totalAmount =
+                    state.totalAmount + action.payload.totalPrice
             } else {
-                state.total = state.total + 1
+                console.log(action.payload.totalPrice)
+                state.totalItem = state.totalItem + action.payload.quantity
+                state.totalAmount =
+                    state.totalAmount + action.payload.totalPrice
                 state.items.push(action.payload)
             }
         },
@@ -42,11 +49,14 @@ const cartSlice = createSlice({
                     item.color !== action.payload.color ||
                     item.size !== action.payload.size
             )
-            state.total = state.total - 1
+            state.totalItem = state.totalItem - action.payload.quantity
+            state.totalAmount = state.totalAmount - action.payload.totalPrice
         },
         clearItems: (state) => {
+            console.log(state)
             state.items = []
-            state.total = 0
+            state.totalItem = 0
+            state.totalAmount = 0
         },
     },
 })

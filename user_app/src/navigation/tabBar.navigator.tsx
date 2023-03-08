@@ -1,5 +1,10 @@
 import React from "react"
-import { BottomNavigation, BottomNavigationTab } from "@ui-kitten/components"
+import {
+    BottomNavigation,
+    BottomNavigationTab,
+    Icon,
+    Text,
+} from "@ui-kitten/components"
 import {
     BottomTabBarProps,
     createBottomTabNavigator,
@@ -8,7 +13,6 @@ import { CartScreen, ShopScreen, WhiteListScreen } from "screens"
 import ProfileScreen from "screens/profile.screen"
 import {
     CartIcon,
-    CartOutlineIcon,
     HeartIcon,
     HeartOutlineIcon,
     HomeIcon,
@@ -17,10 +21,15 @@ import {
     PersonOutlineIcon,
 } from "components/miscellaneous/Icons.component"
 import { TabBarParamsList } from "types/navigation/types"
+import { View } from "react-native"
+import { useAppSelector } from "hooks"
+import { selectedCart } from "actions"
 
 const { Navigator, Screen } = createBottomTabNavigator<TabBarParamsList>()
 
 const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
+    const { totalItem } = useAppSelector(selectedCart)
+
     const selectedIndex = state.index
     return (
         <BottomNavigation
@@ -37,7 +46,46 @@ const BottomTabBar = ({ navigation, state }: BottomTabBarProps) => {
             />
             <BottomNavigationTab
                 title="Cart"
-                icon={selectedIndex === 2 ? CartIcon : CartOutlineIcon}
+                icon={
+                    selectedIndex === 2
+                        ? CartIcon
+                        : (props) => {
+                              return totalItem ? (
+                                  <View>
+                                      <Icon
+                                          {...props}
+                                          name="shopping-cart-outline"
+                                      />
+                                      <View
+                                          style={{
+                                              height: 15,
+                                              width: 15,
+                                              backgroundColor: "blue",
+                                              borderRadius: 10,
+                                              position: "absolute",
+                                              right: 0,
+                                              top: -2,
+                                          }}
+                                      >
+                                          <Text
+                                              style={{
+                                                  color: "#fff",
+                                                  textAlign: "center",
+                                                  fontSize: 10,
+                                              }}
+                                          >
+                                              {totalItem}
+                                          </Text>
+                                      </View>
+                                  </View>
+                              ) : (
+                                  <Icon
+                                      {...props}
+                                      name="shopping-cart-outline"
+                                  />
+                              )
+                          }
+                }
             />
             <BottomNavigationTab
                 title="Profile"

@@ -25,7 +25,7 @@ import {
 import { useAppDispatch, useAppSelector } from "hooks"
 import { useToast } from "react-native-toast-notifications"
 import _ from "lodash"
-import {fakeDataApi} from "api";
+import { fakeDataApi } from "api"
 
 type Product = {
     id: number
@@ -77,16 +77,25 @@ const ProductDetail: FC<ProductDetailScreenProps> = ({
         setWhitelistedProduct(products?.find((p) => p.id === product?.id))
     }, [params.id, product?.id, products])
 
-    const showToast = () => {
+    const showErrorToast = () => {
         if (!chosenColor || !chosenSize)
             return toast.show("Please select size and color", {
                 type: "warning",
                 placement: "bottom",
+                duration: 1000,
             })
     }
 
+    const showSuccessToast = () => {
+        return toast.show("Successfully added to cart", {
+            type: "success",
+            placement: "bottom",
+            duration: 1000,
+        })
+    }
+
     const addToCart = () => {
-        showToast()
+        showErrorToast()
 
         const data = _.omit(product, ["description"])
 
@@ -102,9 +111,10 @@ const ProductDetail: FC<ProductDetailScreenProps> = ({
                 size: chosenSize,
                 color: chosenColor,
                 quantity: totalStack,
-                totalPrice: totalStack * data.price,
+                totalPrice: Math.round(totalStack * data.price),
             })
         )
+        return showSuccessToast()
     }
 
     const toggleBtn = () => {
@@ -188,7 +198,7 @@ const ProductDetail: FC<ProductDetailScreenProps> = ({
                             $&nbsp;
                             {!product?.price
                                 ? 0
-                                : (totalStack * product.price).toFixed(2)}
+                                : Math.round(totalStack * product.price)}
                         </Text>
                     </View>
 

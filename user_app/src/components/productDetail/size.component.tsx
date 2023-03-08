@@ -21,7 +21,8 @@ export const SizeSelector: FC<Props> = ({ setChosenSize, isShoe }: Props) => {
                 ? shoeSizeData[selectedIndex.row]
                 : readyData[selectedIndex.row]
         )
-    }, [isShoe, selectedIndex.row])
+        setChosenSize(displayValue)
+    }, [displayValue, isShoe, selectedIndex.row, setChosenSize])
 
     return (
         <Layout style={styles.container} level="1">
@@ -30,8 +31,7 @@ export const SizeSelector: FC<Props> = ({ setChosenSize, isShoe }: Props) => {
                 selectedIndex={selectedIndex}
                 onSelect={(index) => {
                     // @ts-ignore
-                    setSelectedIndex(index)
-                    return setChosenSize(displayValue)
+                    return setSelectedIndex(index)
                 }}
             >
                 {isShoe
